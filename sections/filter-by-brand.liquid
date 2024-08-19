@@ -1,0 +1,215 @@
+{{ 'section-filter-by-brand.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    }
+
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+
+{%- endstyle -%}
+<section
+  id="Filter-by-brand-{{ section.id }} "
+  class="page-width section-{{ section.id }}-padding custom-button {{ section.settings.heading_alignment }}"
+  data-section="{{ section.id }}"
+>
+  <div class="search__input--container">
+    <div  class="title--wrapper {{ section.settings.title_position }}">
+      <h1 class="search__input--title">
+        {{ page.content }}
+      </h1>
+    </div>
+    <div class="field">
+      <input class="search__input field__input" id="Search-In-Template" type="search" name="q" value="" placeholder="Pesquisar" 
+      role="combobox" aria-expanded="false" aria-owns="predictive-search-results-list" aria-controls="predictive-search-results-list" 
+      aria-haspopup="listbox" aria-autocomplete="list" autocorrect="off" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <label class="field__label" for="Search-In-Template">Pesquisar</label>
+        <input name="" type="hidden" value="last">
+        <div class="predictive-search predictive-search--search-template" tabindex="-1" data-predictive-search="">
+          <div class="predictive-search__loading-state">
+            <svg aria-hidden="true" focusable="false" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+              <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+            </svg>
+          </div>
+        </div>
+        <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+        <button type="submit" class="search__button field__button" aria-label="Pesquisar">
+          <svg class="icon icon-search">
+            <use xlink:href="#icon-search"></use>
+          </svg>
+      </button>
+    </div>
+    
+    <div class="filter-buttons">
+      {%- if section.settings.brands_list != blank -%}
+        {%- for link in section.settings.brands_list.links -%}
+          {% assign firstLetter =  link.title | slice: 0  | split: ',' %}
+          {% assign arrayFirstLetter = arrayFirstLetter | concat : firstLetter  %}
+        {%- endfor -%}
+      {%- endif -%}
+      {% assign arrayFirstLetter = arrayFirstLetter | uniq %}
+      {% for letter in arrayFirstLetter %}
+        <button class="filter-btn" data-filter="{{ letter | downcase }}">{{ letter }}
+        </button>
+      {% endfor %}
+      <button class="filter-btn" data-filter="all">#</button>  
+    </div>
+
+    <div class="list-item--container">
+      {%- if section.settings.brands_list != blank -%}
+        {% for letter in arrayFirstLetter %}
+          <div class="list-item--wrapper">
+            <h4  class="list-item--title">{{ letter }}</h4>
+            <ul class="list-menu " role="list">
+              {%- for link in section.settings.brands_list.links -%}
+                {% assign firstLetterTitle = link.title | slice: 0 %}
+                {% if firstLetterTitle == letter %}
+                    <li class="list-item">
+                      <a href="{{ link.url }}">
+                        {{ link.title }}
+                      </a>  
+                    </li>
+                {% endif %}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {% endfor %}
+      {%- endif -%}
+    </div>
+  </div> 
+</section>
+<script>
+  const containerPage = document.getElementsByTagName('body')[0]
+  containerPage.style.overflowX = 'hidden';
+
+  const searchInput = document.getElementById('Search-In-Template');
+  const itemList = document.getElementsByClassName('list-item')
+  const titleList = document.getElementsByClassName('list-item--title');
+  const filterButtons = document.querySelectorAll('.filter-btn');
+
+  searchInput.addEventListener('keyup', function() {
+    const searchTerm = searchInput.value.toLowerCase();
+    for (let i = 0; i < itemList.length; i++) {
+      const text = itemList[i].textContent.toLowerCase();
+      const match = text.indexOf(searchTerm) !== -1;
+      itemList[i].style.display = match ? 'block' : 'none';
+
+      if ( itemList[i].style.display == 'none' ) {
+       itemList[i].parentElement.parentElement.querySelectorAll('li[style*="display: block"]').length == 0 ? 
+       itemList[i].parentElement.parentElement.style.display = 'none' : itemList[i].parentElement.parentElement.style.display = 'block';
+      }
+      
+      else{
+        itemList[i].parentElement.parentElement.style.display = 'block';
+        itemList[i].parentElement.parentElement.children[0].style.display = 'block';
+        
+      }
+    }
+  });
+  
+  filterButtons.forEach(function(button) {
+  button.addEventListener('click', function() {
+    const filterValue = button.getAttribute('data-filter');
+    const searchTerm = searchInput.value= '';
+
+    const clearItens = (param) => {
+      for (let i = 0; i < param.length; i++) {
+      const text = param[i].textContent.toLowerCase();
+      const hasVowel = text.match(/\b\w/g)[0] === filterValue;
+
+      const match = filterValue === 'all' ? true : hasVowel;
+
+      param[i].style.display = match ? 'block' : 'none';
+      
+      if ( itemList[i].style.display == 'none' ) {
+        itemList[i].parentElement.parentElement.style.display = 'none';
+      }
+      else{
+        itemList[i].parentElement.parentElement.style.display = 'block';
+        itemList[i].parentElement.style.display = 'block';
+      }
+    }
+  }
+    clearItens(itemList)
+    clearItens(titleList)
+   
+    // remove a classe 'active' de todos os botões
+    filterButtons.forEach(function(btn) {
+      btn.classList.remove('active');
+    });
+    // adiciona a classe 'active' no botão clicado
+    button.classList.add('active');
+  });
+
+});
+</script>
+
+{% schema %}
+    {
+      "name": "t:sections.filter-by-brand.name",
+      "class": "section",
+      "tag": "section",
+      "settings": [
+        {
+        "type": "select",
+        "id": "title_position",
+        "options": [
+            {
+            "value": "left",
+            "label": "t:sections.filter-by-brand.settings.title_position.options__1.label"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.filter-by-brand.settings.title_position.options__2.label"
+            },
+            {
+              "value": "right",
+              "label": "t:sections.filter-by-brand.settings.title_position.options__3.label"
+            }
+        ],
+        "default": "center",
+        "label": "t:sections.filter-by-brand.settings.title_position.label"
+         },
+        {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+        },
+        {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 36
+        },
+        {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 36
+        },
+        {
+          "type": "link_list",
+          "id": "brands_list",
+          "label": "t:sections.header.settings.menu.label"
+        }
+      ],
+      "presets": [
+        {
+        "name":"filter-by-brand"
+        }
+      ]
+}
+{% endschema %}

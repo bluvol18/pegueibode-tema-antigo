@@ -1,0 +1,34 @@
+.customButton--link{
+   text-decoration: none;
+}
+
+.customButton--link.metafield-empty{
+   display: none;
+}
+
+.custom-button{
+   display: flex;
+   margin: 0;
+}
+.custom-button a{
+   text-decoration: underline;
+   font-size: 1.2rem;
+   line-height: 1.4rem;
+   color: rgb(var(--color-foreground));
+}
+
+.custom-button.center{
+   justify-content: center;
+}
+
+.custom-button.right{
+   justify-content: flex-end;
+}
+
+.custom-button.left{
+   justify-content: flex-start;
+}
+
+.customButton--link--normal{
+   text-transform:none ;
+}

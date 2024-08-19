@@ -1,0 +1,6 @@
+<a class="wpp-floating" href="{{ settings.link_whatsapp }}" style="background-color: {{ settings.background_whatsapp }}; color: {{ settings.color_whatsapp }};" target="_blank">
+  {% render 'icon-whatsapp' %}
+  {% if settings.text_whatsapp != blank %}
+    <span class="wpp-floating__text">{{ settings.text_whatsapp }}</span>
+  {% endif %}
+</a>

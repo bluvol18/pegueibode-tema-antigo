@@ -1,0 +1,17 @@
+.card--standard .card__inner {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
+.card--standard .card__inner .image  {
+    width: 100%;
+}
+
+.card--standard .card__inner .image img {
+    width: 100%;
+}
+
+.card--standard .card__content .price .recently-viewed{
+    margin-top: 0.7rem;
+}

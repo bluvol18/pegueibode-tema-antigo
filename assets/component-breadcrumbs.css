@@ -1,0 +1,44 @@
+.breadcrumbs {
+  width: 100%;
+}
+
+.breadcrumbs__list {
+  list-style-type: none;
+  margin: 0;
+  padding: .75rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.breadcrumbs__item:not(:last-child):after {
+  content: url('data:image/svg+xml; utf8, <svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M5.62422 5L1.24922 9.375L0.636719 8.7625L4.39922 5L0.636719 1.2375L1.24922 0.625L5.62422 5Z" fill="currentColor" /></svg>');
+  opacity: .35;
+}
+
+.breadcrumbs__item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.breadcrumbs__link {
+  color: rgba(var(--color-foreground), .7);
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.breadcrumbs__link:hover {
+  text-decoration: underline;
+}
+
+.breadcrumbs__link[aria-current="page"] {
+  color: inherit;
+  text-decoration: none;
+  color: rgb(var(--color-foreground));
+}
+
+.breadcrumbs__link[aria-current="page"]:hover,
+.breadcrumbs__link[aria-current="page"]:focus {
+  text-decoration: underline;
+}

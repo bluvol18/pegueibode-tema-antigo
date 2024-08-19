@@ -1,0 +1,115 @@
+.multibanners__card {
+  position: relative;
+  overflow: hidden;
+}
+
+.multibanners__card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.4) 86.8%);
+  z-index: 2;
+}
+
+.multibanners__card--invert::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.4) 86.8%);
+}
+
+.multibanners__card-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+}
+
+.multibanners__card-image {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: block;
+  z-index: 1;
+  transform: scale(1);
+  transition: all .5s;
+}
+
+.multibanners__card:hover .multibanners__card-image {
+  transform: scale(1.1);
+}
+
+.multibanners__card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  z-index: 3;
+  padding: 4rem;
+}
+
+.multibanners__card--left .multibanners__card-content {
+  align-items: flex-start;
+}
+
+.multibanners__card--center .multibanners__card-content {
+  align-items: center;
+}
+
+.multibanners__card--right .multibanners__card-content {
+  align-items: flex-end;
+}
+
+.multibanners__card-title {
+  margin: 0;
+  padding: 0;
+  font-size: 2.4rem;
+  text-transform: uppercase;
+  color: rgb(var(--color-background));
+}
+
+.multibanners__card--invert .multibanners__card-title {
+  color: rgb(var(--color-foreground));
+}
+
+.multibanners__card-cta {
+  font-size: 1.4rem;
+}
+
+.multibanners__card-cta--button {
+  padding: 1rem 2.4rem;
+  background-color: rgb(var(--color-background));
+  border: 1px solid rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+}
+
+.multibanners__card:hover .multibanners__card-cta--button {
+  background-color: transparent;
+  color: rgb(var(--color-background));
+}
+
+.multibanners__card--invert .multibanners__card-cta--button {
+  background-color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+}
+
+.multibanners__card.multibanners__card--invert:hover .multibanners__card-cta--button {
+  background-color: transparent;
+  color: rgb(var(--color-foreground));
+}
+
+.multibanners__card-cta--link {
+  color: rgb(var(--color-background));
+  text-transform: uppercase;
+  text-decoration: underline;
+}
+
+.multibanners__card--invert .multibanners__card-cta--link {
+  color: rgb(var(--color-foreground));
+}

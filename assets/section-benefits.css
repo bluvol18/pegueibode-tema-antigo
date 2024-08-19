@@ -1,0 +1,48 @@
+.benefits .grid {
+  margin-bottom: 0;
+  column-gap: 0;
+}
+
+.benefits__item {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  text-align: center;
+  color: inherit;
+}
+
+.benefits__item > * {
+  margin: 0;
+  padding: 0;
+  color: inherit;
+}
+
+.benefits__title {
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  line-height: 1.8rem;
+  letter-spacing: .12rem;
+}
+
+.benefits__text {
+  font-size: 1.4rem;
+  line-height: 1.6rem;
+}
+
+.benefits .slider-button svg {
+  height: 1.2rem;
+}
+
+.benefits .slider-button--prev {
+  position: absolute;
+  top: 50%;
+  left: -1.5rem;
+  transform: translateY(-50%);
+}
+
+.benefits .slider-button--next {
+  position: absolute;
+  top: 50%;
+  right: -1.5rem;
+  transform: translateY(-50%);
+}

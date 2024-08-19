@@ -1,0 +1,235 @@
+{{ '//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js' | script_tag }}
+{{ 'jquery.products.min.js' | asset_url | script_tag }}
+
+<link rel="stylesheet" href="{{ 'component-card.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+{{ 'component-recently-viewed.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+
+<div class="color-{{ section.settings.color_scheme }} gradient no-js-hidden recently-viewed-product">
+  <div class="product-recommendations page-width section-{{ section.id }}-padding isolate">
+    <h2 class="product-recommendations__heading {{ section.settings.heading_size }} {{ section.settings.heading_alignment }} {{ section.settings.heading_capitalize }}">{{ section.settings.heading | escape }}</h2>
+    <ul id="recently-viewed-products" class="grid product-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down" role="list">
+    </ul>
+  {% raw %}        
+  <script id="recently-viewed-product-template"  type="text/x-jquery-tmpl">
+  <li class="grid__item">
+    <div class="card-wrapper product-card-wrapper underline-links-hover">
+      <div class="card card--standard card--media">
+        <div class="card__inner gradient ratio">
+          <div class="image">
+            <a href="${url}">
+              <img src="${Shopify.Products.resizeImage(featured_image, "large")}"  />
+            </a>
+          </div>
+        </div>
+        <div class="card__content">
+          <div class="card__information">
+            <h3 class="card__heading h5">${title}</h3>
+              <div class="price">
+                <div class="price__regular recently-viewed">
+                  ${Shopify.formatMoney(price)}
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+  {% endraw %}
+  <script>
+  Shopify.Products.showRecentlyViewed( { howManyToShow:{{section.settings.products_to_show}} } );
+  const cookies = $.cookie("shopify_recently_viewed");
+  const recently_viewed_product_container = document.querySelector('.recently-viewed-product')
+  if (!cookies)recently_viewed_product_container.style.display = "none";
+  </script>
+  </div>
+</div>
+{% schema %}
+    {
+      "name": "t:sections.recently-viewed.name",
+      "class": "section",
+      "tag": "section",
+      "settings": [
+        {
+        "type": "paragraph",
+        "content": "t:sections.recently-viewed.settings.paragraph__1.content"
+        },
+        {
+        "type": "text",
+        "id": "heading",
+        "default": "Produtos recem vistos",
+        "label": "t:sections.recently-viewed.settings.heading.label"
+        },
+        {
+        "type": "select",
+        "id": "heading_size",
+        "options": [
+            {
+            "value": "h2",
+            "label": "t:sections.all.heading_size.options__1.label"
+            },
+            {
+            "value": "h1",
+            "label": "t:sections.all.heading_size.options__2.label"
+            },
+            {
+            "value": "h0",
+            "label": "t:sections.all.heading_size.options__3.label"
+            }
+        ],
+        "default": "h1",
+        "label": "t:sections.all.heading_size.label"
+        },
+        {
+        "type": "select",
+        "id": "heading_alignment",
+        "options": [
+            {
+            "value": "left",
+            "label": "t:sections.all.heading_alignment.options__1.label"
+            },
+            {
+            "value": "center",
+            "label": "t:sections.all.heading_alignment.options__2.label"
+            },
+            {
+            "value": "right",
+            "label": "t:sections.all.heading_alignment.options__3.label"
+            }
+        ],
+        "default": "center",
+        "label": "t:sections.all.heading_alignment.label"
+        },
+        {
+        "type": "select",
+        "id": "heading_capitalize",
+        "options": [
+            {
+            "value": "normal",
+            "label": "t:sections.all.heading_capitalize.options__1.label"
+            },
+            {
+            "value": "uppercase",
+            "label": "t:sections.all.heading_capitalize.options__2.label"
+            }
+        ],
+        "default": "uppercase",
+        "label": "t:sections.all.heading_capitalize.label"
+        },
+        {
+        "type": "range",
+        "id": "products_to_show",
+        "min": 2,
+        "max": 10,
+        "step": 1,
+        "default": 4,
+        "label": "t:sections.product-recommendations.settings.products_to_show.label"
+        },
+        {
+        "type": "range",
+        "id": "columns_desktop",
+        "min": 1,
+        "max": 5,
+        "step": 1,
+        "default": 4,
+        "label": "t:sections.product-recommendations.settings.columns_desktop.label"
+        },
+        {
+        "type": "select",
+        "id": "color_scheme",
+        "options": [
+            {
+            "value": "accent-1",
+            "label": "t:sections.all.colors.accent_1.label"
+            },
+            {
+            "value": "accent-2",
+            "label": "t:sections.all.colors.accent_2.label"
+            },
+            {
+            "value": "background-1",
+            "label": "t:sections.all.colors.background_1.label"
+            },
+            {
+            "value": "background-2",
+            "label": "t:sections.all.colors.background_2.label"
+            },
+            {
+            "value": "inverse",
+            "label": "t:sections.all.colors.inverse.label"
+            }
+        ],
+        "default": "background-1",
+        "label": "t:sections.all.colors.label",
+        "info": "t:sections.all.colors.has_cards_info"
+        },
+    {
+      "type": "header",
+      "content": "t:sections.product-recommendations.settings.header__2.content"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.product-recommendations.settings.header_mobile.content"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "default": "2",
+      "label": "t:sections.product-recommendations.settings.columns_mobile.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.product-recommendations.settings.columns_mobile.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.product-recommendations.settings.columns_mobile.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+      ],
+      "presets": [
+        {"name":"t:sections.recently-viewed.name"}
+      ]
+    }
+{% endschema %}
